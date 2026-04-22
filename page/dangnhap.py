@@ -5,10 +5,11 @@ import os
 
 
 class LoginUI:
-    def __init__(self, root, on_login_success, on_go_to_register):
+    def __init__(self, root, on_login_success, on_go_to_register, on_forgot_password):
         self.root = root
         self.on_login_success = on_login_success
         self.on_go_to_register = on_go_to_register
+        self.on_forgot_password = on_forgot_password  # Thêm hàm callback cho Quên mật khẩu
         self.file_path = "accounts.csv"
         self.setup_ui()
 
@@ -25,7 +26,7 @@ class LoginUI:
         left_frame.pack(side="left", fill="both", expand=True)
 
         tk.Label(left_frame, text="4S TEAM LOGIN", font=("Arial Bold", 24), bg="white", fg="#2B323F").pack(
-            pady=(50, 30))
+            pady=(40, 20))
 
         form_container = tk.Frame(left_frame, bg="white")
         form_container.pack(padx=50, fill="x")
@@ -38,7 +39,7 @@ class LoginUI:
         # Password
         tk.Label(form_container, text="Mật khẩu", font=("Arial Bold", 10), bg="white").pack(anchor="w")
         self.entry_password = tk.Entry(form_container, font=("Arial", 12), bd=1, relief="solid", bg="#F9F9F9", show="*")
-        self.entry_password.pack(fill="x", pady=(5, 15), ipady=8)
+        self.entry_password.pack(fill="x", pady=(5, 10), ipady=8)
 
         # Chọn quyền (Role)
         tk.Label(form_container, text="Bạn là:", font=("Arial Bold", 10), bg="white").pack(anchor="w")
@@ -53,11 +54,15 @@ class LoginUI:
 
         # Nút Đăng nhập
         tk.Button(left_frame, text="ĐĂNG NHẬP", bg="#2B323F", fg="white", font=("Arial Bold", 11),
-                  cursor="hand2", command=self.handle_login).pack(pady=(20, 10), padx=50, fill="x", ipady=10)
+                  cursor="hand2", command=self.handle_login).pack(pady=(15, 10), padx=50, fill="x", ipady=10)
 
         # Nút Đăng ký
         tk.Button(left_frame, text="Chưa có tài khoản? Đăng ký ngay", bg="white", fg="#3498db", bd=0,
                   font=("Arial", 10, "underline"), cursor="hand2", command=self.on_go_to_register).pack()
+
+        # Nút Quên mật khẩu (Mới thêm)
+        tk.Button(left_frame, text="Quên mật khẩu?", bg="white", fg="#e67e22", bd=0,
+                  font=("Arial", 10), cursor="hand2", command=self.on_forgot_password).pack(pady=5)
 
         # --- PHẦN BÊN PHẢI: TRANG TRÍ ---
         right_frame = tk.Frame(main_frame, bg="#2B323F", width=425)
@@ -106,5 +111,3 @@ class LoginUI:
 
         except Exception as e:
             messagebox.showerror("Lỗi hệ thống", f"Không thể đọc file CSV: {e}")
-
-# Lưu ý: Cấu trúc file accounts.csv phải có tiêu đề: username,password,email,role
